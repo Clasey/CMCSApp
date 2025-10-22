@@ -1,0 +1,41 @@
+﻿@model IEnumerable<CMCSApp.Models.Claim>
+@{
+    Layout = "_Layout";
+}
+<h2>Programme Coordinator | Review</h2>
+
+<table class="claims-table">
+    <thead>
+        <tr>
+            <th>Claim ID</th>
+            <th>Lecturer ID</th>
+            <th>Month</th>
+            <th>Hours</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.ClaimId</td>
+                <td>@c.LecturerId</td>
+                <td>@c.Month</td>
+                <td>@c.HoursWorked</td>
+                <td>@c.Status</td>
+                <td>
+                    <form method="post" asp-action="Verify" style="display:inline">
+                        <input type="hidden" name="id" value="@c.ClaimId" />
+                        <button class="btn small" type="submit">Verify</button>
+                    </form>
+                    <form method="post" asp-action="SendBack" style="display:inline">
+                        <input type="hidden" name="id" value="@c.ClaimId" />
+                        <button class="btn alt small" type="submit">Send Back</button>
+                    </form>
+                    <a class="btn small" href="/Home/Index">View</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

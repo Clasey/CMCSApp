@@ -1,0 +1,36 @@
+﻿@model IEnumerable<CMCSApp.Models.Claim>
+@{
+    Layout = "_Layout";
+}
+<h2>My Submitted Claims</h2>
+
+<table class="claims-table">
+    <thead>
+        <tr>
+            <th>Claim ID</th>
+            <th>Month</th>
+            <th>Hours</th>
+            <th>Status</th>
+            <th>Rejection Reason</th>
+            <th>Submitted At</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.ClaimId</td>
+                <td>@c.Month</td>
+                <td>@c.HoursWorked</td>
+                <td>@c.Status</td>
+                <td>
+                    @if (c.Status == CMCSApp.Models.ClaimStatus.Rejected)
+                    {
+                        <span style="color:red">@c.RejectionReason</span>
+                    }
+                </td>
+                <td>@c.SubmittedAt.ToString("dd MMM yyyy")</td>
+            </tr>
+        }
+    </tbody>
+</table>

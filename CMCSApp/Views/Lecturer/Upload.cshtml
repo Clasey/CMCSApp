@@ -1,0 +1,18 @@
+﻿@model CMCSApp.Models.Claim
+@{
+    Layout = "_Layout";
+}
+<h2>Upload Documents</h2>
+<p>Upload documents you want to share</p>
+
+<form method="post" asp-controller="Lecturer" asp-action="Complete" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="@Model.ClaimId" />
+    <div class="upload-box">
+        <p>Drag and Drop Here OR</p>
+        <input type="file" name="files" multiple />
+    </div>
+
+    <div style="margin-top:10px">
+        <button class="btn" type="submit">Complete</button>
+    </div>
+</form>

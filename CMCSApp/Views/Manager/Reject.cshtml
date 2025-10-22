@@ -1,0 +1,22 @@
+﻿@model CMCSApp.Models.Claim
+@{
+    Layout = "_Layout";
+}
+<h2>Reject Claim @Model.ClaimId</h2>
+
+<p>Lecturer ID: <b>@Model.LecturerId</b></p>
+<p>Month: <b>@Model.Month</b></p>
+<p>Hours Worked: <b>@Model.HoursWorked</b></p>
+
+<form method="post" asp-action="Reject" asp-controller="Manager">
+    <input type="hidden" name="id" value="@Model.ClaimId" />
+    <div>
+        <label>Reason for rejection:</label><br />
+        <textarea name="reason" required style="width:400px; height:100px;"></textarea>
+    </div>
+
+    <div style="margin-top:10px;">
+        <button type="submit" class="btn alt">Reject Claim</button>
+        <a href="/Manager/ApproveReject" class="btn">Cancel</a>
+    </div>
+</form>

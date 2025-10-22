@@ -1,0 +1,18 @@
+﻿@model CMCSApp.Models.Claim
+@{
+    Layout = "_Layout";
+}
+<h2>Lecturer Portal | Confirmation | Upload</h2>
+
+<div class="confirmation">
+    <p>Hours Worked: <strong>@Model.HoursWorked Hrs.</strong></p>
+    <p>Hourly Rate: <strong>R@Model.HourlyRate / hr</strong></p>
+    <p>Claim Month: <strong>@Model.Month</strong></p>
+    <p>Notes: @Model.Notes</p>
+    <p>Claim ID: <strong>@Model.ClaimId</strong></p>
+</div>
+
+<div style="margin-top:10px">
+    <a class="btn" href="/Lecturer/Upload?id=@Model.ClaimId">Upload Files</a>
+    <a class="btn alt" href="/Lecturer/Fill">Go Back</a>
+</div>

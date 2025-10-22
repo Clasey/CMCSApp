@@ -1,0 +1,82 @@
+﻿@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var user = HttpContextAccessor.HttpContext?.User;
+    var isAuthenticated = user?.Identity?.IsAuthenticated ?? false;
+    var name = isAuthenticated ? user?.Identity?.Name : "Guest";
+    var role = user?.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>CMCS - Contract Management Claim System</title>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header class="site-header">
+        <div class="brand">
+            <h1>CMCS</h1>
+            <div class="tag">Contract Management Claim System</div>
+        </div>
+        <nav class="top-nav">
+            <a href="/">Home</a>
+            <a href="/Account/Profile">Profile</a>
+            @if (!isAuthenticated)
+            {
+                <a href="/Account/Login">Login</a>
+            }
+            else
+            {
+                <form method="post" action="/Account/Logout" style="display:inline">
+                    <button type="submit" class="link-button">Log Out</button>
+                </form>
+            }
+
+            <span class="spacer"></span>
+
+            <a href="/Home/Index">Terms</a>
+            <a href="/Home/Index">Privacy Policy</a>
+            <a href="/Home/Index">Support</a>
+        </nav>
+    </header>
+
+    <div class="role-nav">
+        <a href="/">Home</a>
+        <span>|</span>
+        <a href="/Account/Profile">Profile</a>
+        <span>|</span>
+        <a href="/Account/Login">Login</a>
+        <span class="padded">|</span>
+
+        <a href="/Lecturer/Fill">Lecturer Portal</a>
+        <a href="/Lecturer/MyClaims">My Claims</a>
+        <span>|</span>
+        <a href="/Lecturer/Fill">Submit Claims</a>
+
+        <span class="spacer2"></span>
+        <div class="who">@name @if(!string.IsNullOrEmpty(role)){
+        <text> - @role</text>
+                }
+</div>
+    </div>
+
+    <main class="content">
+        @if (TempData["Message"] != null)
+        {
+            <div class="message">@TempData["Message"]</div>
+        }
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer">
+        <div>© @DateTime.UtcNow.Year CMCS — Terms | Privacy Policy | Support</div>
+    </footer>
+
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

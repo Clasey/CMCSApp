@@ -1,0 +1,147 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f5f7fb;
+    color: #333;
+}
+
+.site-header {
+    background: #1f2937;
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.brand h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.brand .tag {
+    font-size: 12px;
+    color: #cbd5e1;
+}
+
+.top-nav a, .top-nav .link-button {
+    color: #e6eef8;
+    margin-left: 12px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.link-button {
+    background: none;
+    border: none;
+    color: #e6eef8;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.role-nav {
+    background: white;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+    .role-nav a {
+        color: #1f2937;
+        text-decoration: none;
+    }
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.spacer2 {
+    width: 12px;
+}
+
+.who {
+    margin-left: auto;
+    font-weight: 600;
+    color: #111827;
+}
+
+.content {
+    padding: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.site-footer {
+    text-align: center;
+    padding: 12px;
+    background: #fff;
+    border-top: 1px solid #e2e8f0;
+    margin-top: 30px;
+}
+
+.role-cards {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.card {
+    background: white;
+    padding: 16px;
+    border: 1px solid #e6eef8;
+    border-radius: 6px;
+    width: 30%;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 12px;
+    background: #2563eb;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+    .btn.alt {
+        background: #6b7280;
+    }
+
+    .btn.small {
+        padding: 4px 8px;
+        font-size: 13px;
+    }
+
+.claims-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    background: white;
+}
+
+    .claims-table th, .claims-table td {
+        padding: 8px 10px;
+        border-bottom: 1px solid #eef2f7;
+        text-align: left;
+    }
+
+.upload-box {
+    border: 2px dashed #cbd5e1;
+    padding: 20px;
+    background: #fafafa;
+    text-align: center;
+    border-radius: 6px;
+}
+
+.message {
+    background: #e6fffa;
+    border-left: 4px solid #10b981;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}

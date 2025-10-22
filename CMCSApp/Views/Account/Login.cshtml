@@ -1,0 +1,30 @@
+﻿@model CMCSApp.ViewModels.LoginViewModel
+@{
+    Layout = "_Layout";
+}
+<h2>Login</h2>
+
+<form method="post" asp-controller="Account" asp-action="Login">
+    <div>
+        <label>Username</label><br />
+        <input asp-for="Username" />
+        <span asp-validation-for="Username"></span>
+    </div>
+    <div>
+        <label>Password</label><br />
+        <input asp-for="Password" type="password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <input type="hidden" asp-for="ReturnUrl" />
+    <div style="margin-top:10px">
+        <button type="submit" class="btn">Log in</button>
+    </div>
+</form>
+
+<div style="margin-top:20px">
+    <p>Demo users: <b>lect1</b>, <b>coord1</b>, <b>mgr1</b> — password: <b>password</b></p>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
