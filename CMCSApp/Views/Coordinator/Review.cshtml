@@ -29,11 +29,18 @@
                         <input type="hidden" name="id" value="@c.ClaimId" />
                         <button class="btn small" type="submit">Verify</button>
                     </form>
+
                     <form method="post" asp-action="SendBack" style="display:inline">
                         <input type="hidden" name="id" value="@c.ClaimId" />
                         <button class="btn alt small" type="submit">Send Back</button>
                     </form>
-                    <a class="btn small" href="/Home/Index">View</a>
+
+                    <a asp-controller="Coordinator"
+                       asp-action="ViewClaim"
+                       asp-route-id="@c.ClaimId"
+                       class="btn small">
+                        View
+                    </a>
                 </td>
             </tr>
         }
