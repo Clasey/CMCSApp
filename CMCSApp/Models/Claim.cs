@@ -44,5 +44,6 @@ namespace CMCSApp.Models
         [ForeignKey("LecturerId")]
         public User? User { get; set; }
         public int UserId { get; set; }
+        public int Id { get; set; }
     }
 }
