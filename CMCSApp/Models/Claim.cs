@@ -43,5 +43,6 @@ namespace CMCSApp.Models
         // optional foreign key to User
         [ForeignKey("LecturerId")]
         public User? User { get; set; }
+        public int UserId { get; set; }
     }
 }
