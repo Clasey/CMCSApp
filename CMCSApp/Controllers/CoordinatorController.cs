@@ -18,6 +18,16 @@ namespace CMCSApp.Controllers
             return View(claims);
         }
 
+        [HttpGet]
+        public IActionResult ViewClaim(string id)
+        {
+            var claim = _repo.GetById(id);
+            if (claim == null)
+                return NotFound();
+
+            return View(claim);
+        }
+
         [HttpPost]
         public IActionResult Verify(string id)
         {
