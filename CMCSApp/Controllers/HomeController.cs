@@ -8,5 +8,11 @@ namespace CMCSApp.Controllers
         {
             return View();
         }
+
+        public IActionResult Error()
+        {
+            return View();
+        }
+
     }
 }
