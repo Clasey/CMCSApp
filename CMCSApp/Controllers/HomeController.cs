@@ -1,18 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using CMCSApp.Models;
 
 namespace CMCSApp.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
 
-        public IActionResult Error()
-        {
-            return View();
-        }
-
+        public IActionResult Error() => View();
     }
 }
