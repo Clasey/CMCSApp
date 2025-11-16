@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Authentication.Cookies
 @inject IHttpContextAccessor HttpContextAccessor
+
 @{
     var user = HttpContextAccessor.HttpContext?.User;
     var isAuthenticated = user?.Identity?.IsAuthenticated ?? false;
@@ -24,45 +25,20 @@
         </div>
         <nav class="top-nav">
             <a href="/">Home</a>
-            <a href="/Account/Profile">Profile</a>
             @if (!isAuthenticated)
             {
                 <a href="/Account/Login">Login</a>
+                <a href="/Account/Register">Register</a>
             }
             else
             {
+                <span>@name - @role</span>
                 <form method="post" action="/Account/Logout" style="display:inline">
-                    <button type="submit" class="link-button">Log Out</button>
+                    <button type="submit" class="link-button">Logout</button>
                 </form>
             }
-
-            <span class="spacer"></span>
-
-            <a href="/Home/Index">Terms</a>
-            <a href="/Home/Index">Privacy Policy</a>
-            <a href="/Home/Index">Support</a>
         </nav>
     </header>
-
-    <div class="role-nav">
-        <a href="/">Home</a>
-        <span>|</span>
-        <a href="/Account/Profile">Profile</a>
-        <span>|</span>
-        <a href="/Account/Login">Login</a>
-        <span class="padded">|</span>
-
-        <a href="/Lecturer/Fill">Lecturer Portal</a>
-        <a href="/Lecturer/MyClaims">My Claims</a>
-        <span>|</span>
-        <a href="/Lecturer/Fill">Submit Claims</a>
-
-        <span class="spacer2"></span>
-        <div class="who">@name @if(!string.IsNullOrEmpty(role)){
-        <text> - @role</text>
-                }
-</div>
-    </div>
 
     <main class="content">
         @if (TempData["Message"] != null)
@@ -77,6 +53,5 @@
     </footer>
 
     @RenderSection("Scripts", required: false)
-
 </body>
 </html>
