@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CMCSApp.Data;
+using CMCSClaim = CMCSApp.Models.Claim;
 using CMCSApp.Models;
 using CMCSApp.ViewModels;
+using System.Linq;
 
 namespace CMCSApp.Controllers
 {
@@ -10,7 +12,11 @@ namespace CMCSApp.Controllers
     public class LecturerController : Controller
     {
         private readonly InMemoryRepository _repo;
-        public LecturerController(InMemoryRepository repo) => _repo = repo;
+
+        public LecturerController(InMemoryRepository repo)
+        {
+            _repo = repo ?? throw new System.ArgumentNullException(nameof(repo));
+        }
 
         [HttpGet]
         public IActionResult Fill()
@@ -23,14 +29,13 @@ namespace CMCSApp.Controllers
         {
             if (!ModelState.IsValid) return View(vm);
 
-            // tie the claim to the logged-in username
             var lecturerUser = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
                                ?? User.Identity?.Name
                                ?? "UnknownLecturer";
 
-            var claim = new Claim
+            var claim = new CMCSClaim
             {
-                LecturerId = lecturerUser,   // ✅ this is key
+                LecturerId = lecturerUser,
                 Month = vm.Month,
                 HoursWorked = vm.HoursWorked,
                 HourlyRate = vm.HourlyRate,
@@ -42,7 +47,6 @@ namespace CMCSApp.Controllers
             TempData["ClaimId"] = claim.ClaimId;
             return RedirectToAction("Confirmation", new { id = claim.ClaimId });
         }
-
 
         [HttpGet]
         public IActionResult Confirmation(string id)
@@ -63,9 +67,9 @@ namespace CMCSApp.Controllers
         [HttpPost]
         public IActionResult Complete(string id)
         {
-            // In this template, we just mark upload completed.
             var claim = _repo.GetById(id);
             if (claim == null) return NotFound();
+
             TempData["Message"] = "Claim submitted and files uploaded (template behavior).";
             return RedirectToAction("Fill");
         }
@@ -77,19 +81,11 @@ namespace CMCSApp.Controllers
                                ?? User.Identity?.Name
                                ?? "";
 
-            // defensive: make sure we have something
             if (string.IsNullOrWhiteSpace(lecturerUser))
-                return View(Enumerable.Empty<Claim>());
+                return View(Enumerable.Empty<CMCSClaim>());
 
             var claims = _repo.GetClaimsByLecturer(lecturerUser).ToList();
-
-            // optional debug output
-            System.Diagnostics.Debug.WriteLine($"LecturerUser = {lecturerUser}, found {claims.Count} claims.");
-
             return View(claims);
         }
-
-
-
     }
 }
