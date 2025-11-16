@@ -5,9 +5,10 @@ namespace CMCSApp.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options) { }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Claim> Claims { get; set; }
+        public DbSet<User> Users => Set<User>();
+        public DbSet<Claim> Claims => Set<Claim>();
     }
 }
