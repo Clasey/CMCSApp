@@ -8,16 +8,16 @@
     <div>
         <label>Username</label><br />
         <input asp-for="Username" />
-        <span asp-validation-for="Username"></span>
+        <span asp-validation-for="Username" class="text-danger"></span>
     </div>
     <div>
         <label>Password</label><br />
         <input asp-for="Password" type="password" />
-        <span asp-validation-for="Password"></span>
+        <span asp-validation-for="Password" class="text-danger"></span>
     </div>
     <input type="hidden" asp-for="ReturnUrl" />
     <div style="margin-top:10px">
-        <button type="submit" class="btn">Log in</button>
+        <button type="submit" class="btn btn-primary">Log in</button>
     </div>
 </form>
 
