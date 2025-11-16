@@ -2,7 +2,7 @@
 @{
     Layout = "_Layout";
 }
-<h2>Programme Coordinator | Review</h2>
+<h2>Programme Coordinator | Review Claims</h2>
 
 <table class="claims-table">
     <thead>
@@ -12,7 +12,7 @@
             <th>Month</th>
             <th>Hours</th>
             <th>Status</th>
-            <th>Action</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -27,20 +27,13 @@
                 <td>
                     <form method="post" asp-action="Verify" style="display:inline">
                         <input type="hidden" name="id" value="@c.ClaimId" />
-                        <button class="btn small" type="submit">Verify</button>
+                        <button class="btn btn-success btn-sm" type="submit">Verify</button>
                     </form>
-
                     <form method="post" asp-action="SendBack" style="display:inline">
                         <input type="hidden" name="id" value="@c.ClaimId" />
-                        <button class="btn alt small" type="submit">Send Back</button>
+                        <button class="btn btn-warning btn-sm" type="submit">Send Back</button>
                     </form>
-
-                    <a asp-controller="Coordinator"
-                       asp-action="ViewClaim"
-                       asp-route-id="@c.ClaimId"
-                       class="btn small">
-                        View
-                    </a>
+                    <a class="btn btn-info btn-sm" asp-action="ViewClaim" asp-route-id="@c.ClaimId">View</a>
                 </td>
             </tr>
         }
