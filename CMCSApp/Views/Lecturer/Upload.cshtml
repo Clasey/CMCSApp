@@ -3,7 +3,7 @@
     Layout = "_Layout";
 }
 <h2>Upload Documents</h2>
-<p>Upload documents you want to share</p>
+<p>Upload any supporting documents for your claim.</p>
 
 <form method="post" asp-controller="Lecturer" asp-action="Complete" enctype="multipart/form-data">
     <input type="hidden" name="id" value="@Model.ClaimId" />
@@ -13,6 +13,6 @@
     </div>
 
     <div style="margin-top:10px">
-        <button class="btn" type="submit">Complete</button>
+        <button class="btn btn-primary" type="submit">Complete Submission</button>
     </div>
 </form>
