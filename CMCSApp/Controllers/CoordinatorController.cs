@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CMCSApp.Data;
+using CMCSClaim = CMCSApp.Models.Claim;
 using CMCSApp.Models;
+using System.Linq;
 
 namespace CMCSApp.Controllers
 {
@@ -9,7 +11,11 @@ namespace CMCSApp.Controllers
     public class CoordinatorController : Controller
     {
         private readonly InMemoryRepository _repo;
-        public CoordinatorController(InMemoryRepository repo) => _repo = repo;
+
+        public CoordinatorController(InMemoryRepository repo)
+        {
+            _repo = repo ?? throw new System.ArgumentNullException(nameof(repo));
+        }
 
         [HttpGet]
         public IActionResult Review()
@@ -22,9 +28,7 @@ namespace CMCSApp.Controllers
         public IActionResult ViewClaim(string id)
         {
             var claim = _repo.GetById(id);
-            if (claim == null)
-                return NotFound();
-
+            if (claim == null) return NotFound();
             return View(claim);
         }
 
