@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace CMCSApp.Models
@@ -12,7 +13,7 @@ namespace CMCSApp.Models
         public string Username { get; set; } = string.Empty;
 
         [Required]
-        public string Password { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty; // store plain text for demo; hash in production
 
         [Required]
         public string Role { get; set; } = string.Empty;
