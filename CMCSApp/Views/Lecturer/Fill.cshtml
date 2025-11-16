@@ -2,29 +2,28 @@
 @{
     Layout = "_Layout";
 }
-<h2>Lecturer Portal | Fill</h2>
+<h2>Lecturer Portal | Fill Claim</h2>
 
 <form method="post" asp-controller="Lecturer" asp-action="Fill">
-    <div>
-        <label>Lecturer ID:</label><br />
-        <input type="hidden" asp-for="LecturerId"
-               value="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" />
-        <span asp-validation-for="LecturerId"></span>
-    </div>
-
+    <input type="hidden" asp-for="LecturerId"
+           value="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" />
+    
     <div>
         <label>Hours Worked:</label><br />
         <input asp-for="HoursWorked" type="number" />
+        <span asp-validation-for="HoursWorked" class="text-danger"></span>
     </div>
 
     <div>
         <label>Hourly Rate:</label><br />
         <input asp-for="HourlyRate" type="number" step="0.01" />
+        <span asp-validation-for="HourlyRate" class="text-danger"></span>
     </div>
 
     <div>
         <label>Claim Month:</label><br />
         <input asp-for="Month" />
+        <span asp-validation-for="Month" class="text-danger"></span>
     </div>
 
     <div>
@@ -33,8 +32,8 @@
     </div>
 
     <div style="margin-top:10px">
-        <button class="btn" type="submit">Submit Claim</button>
-        <button class="btn alt" type="reset">Delete</button>
+        <button class="btn btn-primary" type="submit">Submit Claim</button>
+        <button class="btn btn-secondary" type="reset">Reset</button>
     </div>
 </form>
 
