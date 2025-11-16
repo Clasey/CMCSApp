@@ -2,7 +2,7 @@
 @{
     Layout = "_Layout";
 }
-<h2>Lecturer Portal | Confirmation | Upload</h2>
+<h2>Claim Submitted | Confirmation</h2>
 
 <div class="confirmation">
     <p>Hours Worked: <strong>@Model.HoursWorked Hrs.</strong></p>
@@ -13,6 +13,6 @@
 </div>
 
 <div style="margin-top:10px">
-    <a class="btn" href="/Lecturer/Upload?id=@Model.ClaimId">Upload Files</a>
-    <a class="btn alt" href="/Lecturer/Fill">Go Back</a>
+    <a class="btn btn-primary" href="/Lecturer/Upload?id=@Model.ClaimId">Upload Files</a>
+    <a class="btn btn-secondary" href="/Lecturer/Fill">Go Back</a>
 </div>
