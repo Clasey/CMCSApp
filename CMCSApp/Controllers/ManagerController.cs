@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CMCSApp.Data;
+using CMCSClaim = CMCSApp.Models.Claim;
 using CMCSApp.Models;
+using System.Linq;
 
 namespace CMCSApp.Controllers
 {
@@ -9,12 +11,17 @@ namespace CMCSApp.Controllers
     public class ManagerController : Controller
     {
         private readonly InMemoryRepository _repo;
-        public ManagerController(InMemoryRepository repo) => _repo = repo;
+
+        public ManagerController(InMemoryRepository repo)
+        {
+            _repo = repo ?? throw new System.ArgumentNullException(nameof(repo));
+        }
 
         [HttpGet]
         public IActionResult ApproveReject()
         {
-            var claims = _repo.GetAllClaims().Where(c => c.Status == ClaimStatus.Verified || c.Status == ClaimStatus.Pending);
+            var claims = _repo.GetAllClaims()
+                             .Where(c => c.Status == ClaimStatus.Verified || c.Status == ClaimStatus.Pending);
             return View(claims);
         }
 
@@ -48,6 +55,5 @@ namespace CMCSApp.Controllers
             TempData["Message"] = $"Claim {id} rejected.";
             return RedirectToAction("ApproveReject");
         }
-
     }
 }
