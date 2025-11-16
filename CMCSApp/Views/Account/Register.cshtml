@@ -1,0 +1,49 @@
+﻿@model CMCSApp.ViewModels.RegisterViewModel
+@{
+    Layout = "_Layout";
+}
+
+<h2>Register New User</h2>
+
+<form asp-action="Register" method="post">
+    <div>
+        <label>Username</label><br />
+        <input asp-for="Username" />
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Display Name</label><br />
+        <input asp-for="DisplayName" />
+        <span asp-validation-for="DisplayName" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Password</label><br />
+        <input asp-for="Password" type="password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Confirm Password</label><br />
+        <input asp-for="ConfirmPassword" type="password" />
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Role</label><br />
+        <select asp-for="SelectedRole" asp-items="Model.AvailableRoles">
+            <option value="">-- Select Role --</option>
+        </select>
+        <span asp-validation-for="SelectedRole" class="text-danger"></span>
+    </div>
+
+    <div style="margin-top:10px;">
+        <button type="submit" class="btn">Register</button>
+        <a href="/Account/Login" class="btn alt">Back to Login</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
