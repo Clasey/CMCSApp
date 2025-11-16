@@ -40,10 +40,8 @@ namespace CMCSApp.Models
 
         public string? RejectionReason { get; set; }
 
-        // optional foreign key to User
+        // optional navigation
         [ForeignKey("LecturerId")]
         public User? User { get; set; }
-        public int UserId { get; set; }
-        public int Id { get; set; }
     }
 }
