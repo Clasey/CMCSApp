@@ -30,6 +30,9 @@ namespace CMCSApp.Controllers
         {
             if (!ModelState.IsValid) return View(vm);
 
+            // Auto-calculate total payment
+            var totalPayment = vm.HoursWorked * vm.HourlyRate;
+
             var lecturerUser = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
                                ?? User.Identity?.Name
                                ?? "UnknownLecturer";
@@ -40,6 +43,7 @@ namespace CMCSApp.Controllers
                 Month = vm.Month,
                 HoursWorked = vm.HoursWorked,
                 HourlyRate = vm.HourlyRate,
+                TotalPayment = totalPayment,  // NEW
                 Notes = vm.Notes,
                 Status = ClaimStatus.Pending
             };
@@ -48,6 +52,7 @@ namespace CMCSApp.Controllers
             TempData["ClaimId"] = claim.ClaimId;
             return RedirectToAction("Confirmation", new { id = claim.ClaimId });
         }
+
 
         [HttpGet]
         public IActionResult Confirmation(string id)
