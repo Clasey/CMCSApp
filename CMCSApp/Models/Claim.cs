@@ -43,5 +43,6 @@ namespace CMCSApp.Models
         // optional navigation
         [ForeignKey("LecturerId")]
         public User? User { get; set; }
+        public decimal TotalPayment { get; internal set; }
     }
 }
