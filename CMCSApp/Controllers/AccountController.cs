@@ -4,104 +4,156 @@ using CMCSApp.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using SecClaim = System.Security.Claims.Claim;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace CMCSApp.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly InMemoryRepository? _repo;
+        private readonly ApplicationDbContext _db;
 
-        public AccountController(InMemoryRepository repo)
+        public AccountController(ApplicationDbContext db)
         {
-            _repo = repo;
+            _db = db;
         }
 
-        // ---------------- LOGIN ----------------
+        // ---------------------------
+        // SHOW LOGIN PAGE
+        // ---------------------------
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
         {
-            var vm = new LoginViewModel { ReturnUrl = returnUrl };
-            return View(vm);
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
         }
 
+        // ---------------------------
+        // HANDLE LOGIN
+        // ---------------------------
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel vm)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (!ModelState.IsValid) return View(vm);
+            if (!ModelState.IsValid)
+                return View(model);
 
-            var user = _repo?.ValidateUser(vm.Username, vm.Password);
+            string hashed = HashPassword(model.Password);
+
+            var user = _db.Users
+                .FirstOrDefault(u => u.Email == model.Email && u.PasswordHash == hashed);
+
             if (user == null)
             {
-                ModelState.AddModelError("", "Invalid credentials.");
-                return View(vm);
+                ModelState.AddModelError("", "Invalid login credentials.");
+                return View(model);
             }
 
-            var claims = new List<SecClaim>
+            // ---------------------------
+            // CREATE CLAIMS & COOKIE
+            // ---------------------------
+            var claims = new List<System.Security.Claims.Claim>
             {
-                new SecClaim(System.Security.Claims.ClaimTypes.Name, user.DisplayName),
-                new SecClaim(System.Security.Claims.ClaimTypes.NameIdentifier, user.Username),
-                new SecClaim(System.Security.Claims.ClaimTypes.Role, user.Role)
+                new System.Security.Claims.Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new System.Security.Claims.Claim(ClaimTypes.Name, user.FullName),
+                new(ClaimTypes.Role, user.Role),
+                new System.Security.Claims.Claim(ClaimTypes.Email, user.Email)
             };
 
-            var identity = new System.Security.Claims.ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new System.Security.Claims.ClaimsPrincipal(identity));
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
 
-            if (!string.IsNullOrEmpty(vm.ReturnUrl) && Url.IsLocalUrl(vm.ReturnUrl))
-                return Redirect(vm.ReturnUrl);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-            return RedirectToAction("Index", "Home");
+            // Optional: store user info in session if you need
+            HttpContext.Session.SetString("UserId", user.Id.ToString());
+            HttpContext.Session.SetString("UserRole", user.Role);
+            HttpContext.Session.SetString("UserName", user.FullName);
+
+            // ---------------------------
+            // REDIRECT BASED ON ROLE
+            // ---------------------------
+            if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                return Redirect(model.ReturnUrl);
+
+            return user.Role switch
+            {
+                "Lecturer" => RedirectToAction("Fill", "Lecturer"),
+                "Coordinator" => RedirectToAction("Review", "Coordinator"),
+                "Manager" => RedirectToAction("ApproveReject", "Manager"),
+                _ => RedirectToAction("Index", "Home")
+            };
         }
 
-        // ---------------- LOGOUT ----------------
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
-        }
-
-        // ---------------- PROFILE ----------------
-        [HttpGet]
-        public IActionResult Profile()
-        {
-            return View();
-        }
-
-        // ---------------- REGISTER ----------------
+        // ---------------------------
+        // SHOW REGISTER PAGE
+        // ---------------------------
         [HttpGet]
         public IActionResult Register()
         {
-            var vm = new RegisterViewModel();
-            return View(vm);
-        }
-
-        [HttpPost]
-        public IActionResult Register(RegisterViewModel vm)
-        {
-            if (!ModelState.IsValid) return View(vm);
-
-            // Check if username exists
-            var existingUser = _repo?.GetUserByUsername(vm.Username);
-            if (existingUser != null)
+            var model = new RegisterViewModel
             {
-                ModelState.AddModelError("", "Username already exists.");
-                return View(vm);
-            }
-
-            // Create new user
-            var newUser = new User
-            {
-                Username = vm.Username,
-                DisplayName = vm.DisplayName,
-                Password = vm.Password, // For demo purposes; ideally hash this!
-                Role = vm.SelectedRole
+                Roles = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "Lecturer", Text = "Lecturer" },
+                    new SelectListItem { Value = "Coordinator", Text = "Programme Coordinator" },
+                    new SelectListItem { Value = "Manager", Text = "Academic Manager" }
+                }
             };
 
-            _repo?.AddUser(newUser);
-            TempData["Message"] = $"User {vm.Username} registered successfully. You can now log in.";
+            return View(model);
+        }
 
+        // ---------------------------
+        // HANDLE REGISTRATION
+        // ---------------------------
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Register(RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            if (_db.Users.Any(u => u.Email == model.Email))
+            {
+                ModelState.AddModelError("", "This email is already registered.");
+                return View(model);
+            }
+
+            var user = new User
+            {
+                Email = model.Email,
+                FullName = model.FullName,
+                Role = model.SelectedRole,
+                PasswordHash = HashPassword(model.Password)
+            };
+
+            _db.Users.Add(user);
+            _db.SaveChanges();
+
+            TempData["Success"] = "Registration successful. Please login.";
             return RedirectToAction("Login");
+        }
+
+        // ---------------------------
+        // LOGOUT
+        // ---------------------------
+        public async Task<IActionResult> Logout()
+        {
+            HttpContext.Session.Clear();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
+        }
+
+        // ---------------------------
+        // PASSWORD HASHING
+        // ---------------------------
+        private string HashPassword(string password)
+        {
+            using var sha = SHA256.Create();
+            var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(password));
+            return BitConverter.ToString(bytes).Replace("-", "").ToLower();
         }
     }
 }

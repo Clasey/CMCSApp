@@ -21,6 +21,7 @@ namespace CMCSApp.Controllers
         [HttpGet]
         public IActionResult Fill()
         {
+            var model = new ClaimViewModel();
             return View();
         }
 

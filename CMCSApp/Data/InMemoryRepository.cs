@@ -12,20 +12,22 @@ namespace CMCSApp.Data
         public InMemoryRepository()
         {
             // demo users
-            _users.Add(new User { Username = "lect1", Password = "password", Role = "Lecturer", DisplayName = "Lecturer One" });
-            _users.Add(new User { Username = "coord1", Password = "password", Role = "Coordinator", DisplayName = "Coordinator One" });
-            _users.Add(new User { Username = "mgr1", Password = "password", Role = "Manager", DisplayName = "Manager One" });
+            _users.Add(new User { Email = "lect1", PasswordHash = "12345", Role = "Lecturer", FullName = "Lecturer One" });
+            _users.Add(new User { Email = "coord1", PasswordHash = "12345", Role = "Coordinator", FullName = "Coordinator One" });
+            _users.Add(new User { Email = "mgr1", PasswordHash = "12345", Role = "Manager", FullName = "Manager One" });
+
         }
 
         // Users
-        public User? ValidateUser(string username, string password)
+        public User? ValidateUser(string email, string passwordHash)
         {
-            return _users.FirstOrDefault(u => u.Username == username && u.Password == password);
+            return _users.FirstOrDefault(u => u.Email == email && u.PasswordHash == passwordHash);
         }
 
-        public User? GetUserByUsername(string username)
+
+        public User? GetUserByEmail(string Email)
         {
-            return _users.FirstOrDefault(u => u.Username == username);
+            return _users.FirstOrDefault(u => u.Email == Email);
         }
 
         public void AddUser(User user)

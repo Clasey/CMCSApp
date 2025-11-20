@@ -10,17 +10,18 @@ namespace CMCSApp.Models
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
-        public string Username { get; set; } = string.Empty;
+        public required string Email { get; set; }
 
         [Required]
-        public string Password { get; set; } = string.Empty; // store plain text for demo; hash in production
+        public required string PasswordHash { get; set; }
 
         [Required]
-        public string Role { get; set; } = string.Empty;
+        public required string FullName { get; set; }
 
-        public string DisplayName { get; set; } = string.Empty;
+        [Required]
+        public required string Role { get; set; }
 
-        // Navigation property
+        // Navigation property for claims
         public ICollection<Claim>? Claims { get; set; }
     }
 }

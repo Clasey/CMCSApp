@@ -1,42 +1,47 @@
 ﻿@model CMCSApp.ViewModels.ClaimViewModel
 @{
+    ViewData["Title"] = "Fill Claim";
     Layout = "_Layout";
 }
-<h2>Lecturer Portal | Fill Claim</h2>
 
-<form method="post" asp-controller="Lecturer" asp-action="Fill">
-    <input type="hidden" asp-for="LecturerId"
-           value="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" />
-    
-    <div>
-        <label>Hours Worked:</label><br />
-        <input asp-for="HoursWorked" type="number" />
-        <span asp-validation-for="HoursWorked" class="text-danger"></span>
-    </div>
+<div class="card">
+  <div class="card-body">
+    <h4 class="card-title mb-3">Submit Claim</h4>
 
-    <div>
-        <label>Hourly Rate:</label><br />
-        <input asp-for="HourlyRate" type="number" step="0.01" />
-        <span asp-validation-for="HourlyRate" class="text-danger"></span>
-    </div>
-
-    <div>
-        <label>Claim Month:</label><br />
-        <input asp-for="Month" />
+    <form asp-action="Fill" method="post" enctype="multipart/form-data" novalidate>
+      <div class="mb-3">
+        <label asp-for="Month" class="form-label">Month</label>
+        <input asp-for="Month" class="form-control" placeholder="e.g., March 2025" />
         <span asp-validation-for="Month" class="text-danger"></span>
-    </div>
+      </div>
 
-    <div>
-        <label>Notes (optional):</label><br />
-        <textarea asp-for="Notes"></textarea>
-    </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label asp-for="HoursWorked" class="form-label">Hours Worked</label>
+          <input asp-for="HoursWorked" type="number" class="form-control" />
+          <span asp-validation-for="HoursWorked" class="text-danger"></span>
+        </div>
 
-    <div style="margin-top:10px">
-        <button class="btn btn-primary" type="submit">Submit Claim</button>
-        <button class="btn btn-secondary" type="reset">Reset</button>
-    </div>
-</form>
+        <div class="col-md-6 mb-3">
+          <label asp-for="HourlyRate" class="form-label">Hourly Rate (R)</label>
+          <input asp-for="HourlyRate" type="number" step="0.01" class="form-control" />
+          <span asp-validation-for="HourlyRate" class="text-danger"></span>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label asp-for="Notes" class="form-label">Notes (optional)</label>
+        <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Submit Claim</button>
+        <button type="reset" class="btn btn-outline-secondary">Reset</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+  <partial name="_ValidationScriptsPartial" />
 }

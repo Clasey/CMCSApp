@@ -10,5 +10,15 @@ namespace CMCSApp.Data
 
         public DbSet<User> Users => Set<User>();
         public DbSet<Claim> Claims => Set<Claim>();
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Set precision for decimal HourlyRate
+            modelBuilder.Entity<Claim>()
+                .Property(c => c.HourlyRate)
+                .HasColumnType("decimal(18,2)"); // 18 digits, 2 decimal places
+        }
     }
 }

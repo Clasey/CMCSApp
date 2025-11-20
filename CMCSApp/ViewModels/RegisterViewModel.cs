@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace CMCSApp.ViewModels
+namespace CMCSApp.Models
 {
     public class RegisterViewModel
     {
         [Required]
-        public string Username { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty;
 
         [Required]
-        public string DisplayName { get; set; } = string.Empty;
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
 
         [Required]
         [DataType(DataType.Password)]
@@ -21,15 +21,13 @@ namespace CMCSApp.ViewModels
         [Compare("Password", ErrorMessage = "Passwords do not match.")]
         public string ConfirmPassword { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Please select a role.")]
+        // Selected role chosen by the user
+        [Required]
         public string SelectedRole { get; set; } = string.Empty;
 
-        // Convert roles to SelectListItem
-        public IEnumerable<SelectListItem> AvailableRoles { get; set; } = new List<SelectListItem>
-        {
-            new SelectListItem { Text = "Lecturer", Value = "Lecturer" },
-            new SelectListItem { Text = "Coordinator", Value = "Coordinator" },
-            new SelectListItem { Text = "Manager", Value = "Manager" }
-        };
+        // Dropdown list of roles
+        public IEnumerable<SelectListItem> Roles { get; set; } = new List<SelectListItem>();
+
+        public RegisterViewModel() { }
     }
 }

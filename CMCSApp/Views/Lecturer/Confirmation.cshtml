@@ -1,18 +1,22 @@
 ﻿@model CMCSApp.Models.Claim
 @{
+    ViewData["Title"] = "Claim Confirmation";
     Layout = "_Layout";
 }
-<h2>Claim Submitted | Confirmation</h2>
 
-<div class="confirmation">
-    <p>Hours Worked: <strong>@Model.HoursWorked Hrs.</strong></p>
-    <p>Hourly Rate: <strong>R@Model.HourlyRate / hr</strong></p>
-    <p>Claim Month: <strong>@Model.Month</strong></p>
-    <p>Notes: @Model.Notes</p>
-    <p>Claim ID: <strong>@Model.ClaimId</strong></p>
-</div>
+<div class="card">
+  <div class="card-body">
+    <h4 class="card-title mb-3">Claim Submitted</h4>
 
-<div style="margin-top:10px">
-    <a class="btn btn-primary" href="/Lecturer/Upload?id=@Model.ClaimId">Upload Files</a>
-    <a class="btn btn-secondary" href="/Lecturer/Fill">Go Back</a>
+    <p><strong>Claim ID:</strong> @Model.ClaimId</p>
+    <p><strong>Month:</strong> @Model.Month</p>
+    <p><strong>Hours:</strong> @Model.HoursWorked</p>
+    <p><strong>Hourly Rate:</strong> R@Model.HourlyRate</p>
+    <p><strong>Status:</strong> @Model.Status</p>
+
+    <div class="mt-3">
+      <a class="btn btn-success" href="/Lecturer/Upload?id=@Model.ClaimId">Upload Documents</a>
+      <a class="btn btn-secondary" href="/Lecturer/Fill">Submit another</a>
+    </div>
+  </div>
 </div>

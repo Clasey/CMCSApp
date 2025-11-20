@@ -1,22 +1,20 @@
 ﻿@model CMCSApp.Models.Claim
 @{
+    ViewData["Title"] = "Reject Claim";
     Layout = "_Layout";
 }
+
 <h2>Reject Claim @Model.ClaimId</h2>
 
-<p>Lecturer ID: <b>@Model.LecturerId</b></p>
-<p>Month: <b>@Model.Month</b></p>
-<p>Hours Worked: <b>@Model.HoursWorked</b></p>
+<form asp-action="Reject" method="post">
+  <input type="hidden" name="id" value="@Model.ClaimId" />
+  <div class="mb-3">
+    <label for="reason" class="form-label">Reason for rejection</label>
+    <textarea id="reason" name="reason" class="form-control" rows="4" required></textarea>
+  </div>
 
-<form method="post" asp-action="Reject" asp-controller="Manager">
-    <input type="hidden" name="id" value="@Model.ClaimId" />
-    <div>
-        <label>Reason for rejection:</label><br />
-        <textarea name="reason" required style="width:400px; height:100px;"></textarea>
-    </div>
-
-    <div style="margin-top:10px;">
-        <button type="submit" class="btn btn-danger">Reject Claim</button>
-        <a href="/Manager/ApproveReject" class="btn btn-secondary">Cancel</a>
-    </div>
+  <div class="d-flex gap-2">
+    <button type="submit" class="btn btn-danger">Reject Claim</button>
+    <a class="btn btn-secondary" href="/Manager/ApproveReject">Cancel</a>
+  </div>
 </form>
