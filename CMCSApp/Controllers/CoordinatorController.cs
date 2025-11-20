@@ -53,6 +53,28 @@ namespace CMCSApp.Controllers
             TempData["Message"] = $"Claim {id} sent back for changes.";
             return RedirectToAction("Review");
         }
+        [HttpPost]
+        public IActionResult AutoVerify(string id)
+        {
+            var claim = _repo.GetById(id);
+            if (claim == null) return NotFound();
+
+            // Example rule: auto-verify if hours <= 160 and hourly rate <= 1000
+            if (claim.HoursWorked <= 160 && claim.HourlyRate <= 1000)
+            {
+                claim.Status = ClaimStatus.Verified;
+                TempData["Message"] = $"Claim {id} automatically verified.";
+            }
+            else
+            {
+                claim.Status = ClaimStatus.SentBack;
+                TempData["Message"] = $"Claim {id} sent back for review.";
+            }
+
+            _repo.UpdateClaim(claim);
+            return RedirectToAction("Review");
+        }
+
 
         [HttpGet]
         public IActionResult Verified()
